@@ -1,76 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import {
     UserOutlined,
     LaptopOutlined,
     NotificationOutlined,
 } from '@ant-design/icons';
-import { Link as RouteLink, Route, Switch } from 'react-router-dom';
+import {
+    Link as RouteLink,
+    Route,
+    Switch,
+    withRouter,
+    Redirect,
+} from 'react-router-dom';
 import CustomHooks from './costom-hooks/CustomHooks';
 import MulExecute from './mul-execute/MulExecute';
 import UseStateDemo from './useState-demo/UseStateDemo';
+import ClassSetState from './class-setState/ClassSetState';
+import StoreObject from './store-object/StoreObject';
+import { dealPath, dealNav } from '../../config/reactDemoMenuConfig';
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
 
 function ReactDemo(props) {
+    const getMenu = () => {
+        let subMenuArray = [];
+        for (let item of dealNav) {
+            let subMenuTemp;
+            if (item.subMenu) {
+                // import('@ant-design/icons').then(({ [item.icon]: Icon }) => {
+                subMenuTemp = (
+                    <SubMenu
+                        key={item.key}
+                        // icon={Icon}
+                        title={item.name}
+                    >
+                        {item.children.map((child) => {
+                            return (
+                                <Menu.Item key={child.key}>
+                                    <RouteLink to={child.path}>
+                                        <span>{child.name}</span>
+                                    </RouteLink>
+                                </Menu.Item>
+                            );
+                        })}
+                    </SubMenu>
+                );
+                subMenuArray.push(subMenuTemp);
+                // });
+            } else {
+                subMenuTemp = (
+                    <Menu.Item key={item.key}>
+                        <RouteLink to={item.path}>
+                            <span>{item.name}</span>
+                        </RouteLink>
+                    </Menu.Item>
+                );
+                subMenuArray.push(subMenuTemp);
+            }
+        }
+        return subMenuArray;
+    };
     return (
         <Layout
             className='site-layout-background'
             style={{ padding: '24px 0' }}
         >
-            <Sider className='site-layout-background' width={200}>
+            <Sider className='site-layout-background' width={300}>
                 <Menu
                     mode='inline'
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={dealPath(props.location.pathname)}
                     defaultOpenKeys={['sub1']}
                     style={{ height: '100%' }}
                 >
-                    <SubMenu
-                        key='sub1'
-                        icon={<UserOutlined />}
-                        title='react hooks'
-                    >
-                        <Menu.Item key='1'>
-                            <RouteLink to='/reactDemo/customHooks'>
-                                <span>自定义hooks</span>
-                            </RouteLink>
-                        </Menu.Item>
-                        <Menu.Item key='2'>
-                            <RouteLink to='/reactDemo/mulExecute'>
-                                <span>多次执行setState</span>
-                            </RouteLink>
-                        </Menu.Item>
-                        <Menu.Item key='3'>
-                            <RouteLink to='/reactDemo/UseStateDemo'>
-                                <span>手写useState</span>
-                            </RouteLink>
-                        </Menu.Item>
-                        <Menu.Item key='4'>option4</Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key='sub2'
-                        icon={<LaptopOutlined />}
-                        title='subnav 2'
-                    >
-                        <Menu.Item key='5'>option5</Menu.Item>
-                        <Menu.Item key='6'>option6</Menu.Item>
-                        <Menu.Item key='7'>option7</Menu.Item>
-                        <Menu.Item key='8'>option8</Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key='sub3'
-                        icon={<NotificationOutlined />}
-                        title='subnav 3'
-                    >
-                        <Menu.Item key='9'>option9</Menu.Item>
-                        <Menu.Item key='10'>option10</Menu.Item>
-                        <Menu.Item key='11'>option11</Menu.Item>
-                        <Menu.Item key='12'>option12</Menu.Item>
-                    </SubMenu>
+                    {getMenu()}
                 </Menu>
             </Sider>
             <Content style={{ padding: '0 24px', minHeight: 280 }}>
                 <Switch>
+                    <Redirect
+                        exact
+                        from='/reactDemo'
+                        to='/reactDemo/customHooks'
+                    ></Redirect>
                     <Route
                         path='/reactDemo/customHooks'
                         component={CustomHooks}
@@ -83,10 +94,18 @@ function ReactDemo(props) {
                         path='/reactDemo/UseStateDemo'
                         component={UseStateDemo}
                     ></Route>
+                    <Route
+                        path='/reactDemo/ClassSetState'
+                        component={ClassSetState}
+                    ></Route>
+                    <Route
+                        path='/reactDemo/StoreObject'
+                        component={StoreObject}
+                    ></Route>
                 </Switch>
             </Content>
         </Layout>
     );
 }
 
-export default ReactDemo;
+export default withRouter(ReactDemo);

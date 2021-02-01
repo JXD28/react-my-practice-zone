@@ -14,6 +14,19 @@ function UseStateDemo() {
         return () => console.log('组件销毁');
     }, []);
 
+    //return 在每次重新渲染的时候都会执行
+    useEffect(() => {
+        console.log('effect');
+        return () => console.log('return effect');
+    });
+
+    useEffect(() => {
+        effect;
+        return () => {
+            cleanup;
+        };
+    }, [input]);
+
     const onClick = () => {
         setExecte1(execte1 + 1);
         setExecte2(execte2 + 1);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Table } from 'antd';
 import useTableRowRowSelection from './table-hooks/tableRowSelection';
 const columns = [

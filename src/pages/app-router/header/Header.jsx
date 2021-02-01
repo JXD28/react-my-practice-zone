@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout, Menu } from 'antd';
-import { dealPath, dealNav } from '../../../config/menuConfig';
+import { dealNav } from '../../../config/menuConfig';
 import { Link as RouteLink, withRouter } from 'react-router-dom';
 import useGetMenuKey from './custom-hooks/useGetMenuKey';
 const { Header } = Layout;
@@ -26,13 +26,13 @@ function CustomHeader(props) {
                                 className='subMenu-item'
                             >
                                 {item.children.map((child) => (
-                                    <Menu.Item key={child.key}>
+                                    <Item key={child.key}>
                                         <RouteLink to={child.path}>
                                             <span className='subMenu-name'>
                                                 {child.name}
                                             </span>
                                         </RouteLink>
-                                    </Menu.Item>
+                                    </Item>
                                 ))}
                             </SubMenu>
                         );
