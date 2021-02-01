@@ -20,12 +20,12 @@ function UseStateDemo() {
         return () => console.log('return effect');
     });
 
-    useEffect(() => {
-        effect;
-        return () => {
-            cleanup;
-        };
-    }, [input]);
+    // useEffect(() => {
+    //     effect;
+    //     return () => {
+    //         cleanup;
+    //     };
+    // }, [input]);
 
     const onClick = () => {
         setExecte1(execte1 + 1);
