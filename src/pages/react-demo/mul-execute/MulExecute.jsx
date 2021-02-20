@@ -41,6 +41,9 @@ function MulExecute(props) {
         setCount1((count1) => ++count1);
         setCount1((count1) => ++count1);
         setCount1((count1) => ++count1);
+        for (var i = 0; i < 10; i++) {
+            setTimeout(() => {});
+        }
     };
 
     //3.setTimeOut内多次调用同一方法，会更新多次,到那时获取不到最新的state
@@ -53,11 +56,6 @@ function MulExecute(props) {
         //     // setCount1((count1) => ++count1);
         //     setCount1((count1) => ++count1);
         //     //获取不到最新的state
-        //     console.log(
-        //         '🚀 ~ file: MulExecute.jsx ~ line 48 ~ setTimeout ~ count1',
-        //         count1
-        //     );
-
         //     setCount2((count2) => ++count2);
         //     setCount3((count3) => ++count3);
         //     console.log('setTimeout');
@@ -65,10 +63,6 @@ function MulExecute(props) {
         Promise.resolve('Promise').then((res) => {
             setCount1((count1) => ++count1);
             //获取不到最新的state
-            console.log(
-                '🚀 ~ file: MulExecute.jsx ~ line 67 ~ Promise.resolve ~ count1',
-                count1
-            );
             setCount1((count1) => ++count1);
             setCount1((count1) => ++count1);
             console.log(res);
@@ -85,7 +79,7 @@ function MulExecute(props) {
                 <button onClick={onClick}>点击合成事件</button>
             </div>
             <div>
-                <button onClick={onClick1}>点击(setTimeout)</button>
+                <button onClick={onClick1}>点击(setTimeout/Promise)</button>
             </div>
             <div>setInterval: {count}</div>
             <div>

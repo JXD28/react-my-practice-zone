@@ -24,7 +24,7 @@
     -   this.setState
         -   1.使用回调函数：this.setState({val:1},()=>console.log(this.state.val))
         -   2.在 componentDidUpdate 中调用
-        -   3.setTimeOut 中
+        -   3.setTimeout 中
 
 ### 2.为什么 this.setState 是'异步的'
 
