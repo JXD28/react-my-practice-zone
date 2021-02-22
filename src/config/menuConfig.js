@@ -1,7 +1,7 @@
 const dealPath = (path) => {
     let selectedKeys = null;
     switch (path) {
-        case 'home':
+        case 'chat':
             selectedKeys = ['1'];
             break;
         case 'reactDemo':
@@ -17,8 +17,8 @@ const dealNav = [
     {
         subMenu: false,
         key: '1',
-        path: '/home',
-        name: 'Home',
+        path: '/chat',
+        name: 'Chat',
     },
     ,
     {
