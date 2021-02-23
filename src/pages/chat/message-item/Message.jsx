@@ -1,21 +1,18 @@
-import uuidV4 from 'uuid/dist/v4';
-
 class Message {
-    constructor(userInfo, messageIndex) {
+    constructor(userInfo, messageIndex, messageKey) {
         this.userInfo = userInfo;
         this.messageIndex = messageIndex;
-        this.uuid = uuidV4();
+        this.key = messageKey;
     }
 
     undo = () => {
-        console.log('undo', this.uuid);
-        return this.uuid;
+        return this.key;
     };
 }
 
 class MessageImg extends Message {
-    constructor(content, position, userInfo, messageIndex) {
-        super(userInfo, messageIndex);
+    constructor(content, position, userInfo, messageIndex, messageKey) {
+        super(userInfo, messageIndex, messageKey);
         this.content = content;
         this.position = position;
     }
@@ -23,7 +20,7 @@ class MessageImg extends Message {
     showMessage() {
         return (
             <div
-                key={this.uuid}
+                key={this.key}
                 style={{ display: 'flex', justifyContent: this.position }}
             >
                 <div
@@ -43,8 +40,8 @@ class MessageImg extends Message {
 }
 
 class MessageSys extends Message {
-    constructor(content, position, userInfo, messageIndex) {
-        super(userInfo, messageIndex);
+    constructor(content, position, userInfo, messageIndex, messageKey) {
+        super(userInfo, messageIndex, messageKey);
         this.content = content;
         this.position = position;
     }
@@ -52,7 +49,7 @@ class MessageSys extends Message {
     showMessage() {
         return (
             <div
-                key={this.uuid}
+                key={this.key}
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
                 <div
@@ -74,8 +71,8 @@ class MessageSys extends Message {
 }
 
 class MessageText extends Message {
-    constructor(content, position, userInfo, messageIndex) {
-        super(userInfo, messageIndex);
+    constructor(content, position, userInfo, messageIndex, messageKey) {
+        super(userInfo, messageIndex, messageKey);
         this.content = content;
         this.position = position;
     }
@@ -83,7 +80,7 @@ class MessageText extends Message {
     showMessage() {
         return (
             <div
-                key={this.uuid}
+                key={this.key}
                 style={{ display: 'flex', justifyContent: this.position }}
             >
                 <div

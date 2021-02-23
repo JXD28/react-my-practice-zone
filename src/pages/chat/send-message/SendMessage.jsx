@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Input, Radio, Checkbox } from 'antd';
 import { MessageImg, MessageSys, MessageText } from '../message-item/Message';
 import UserInfo from '../userInfo/UserInfo';
@@ -19,27 +19,32 @@ function SendMessage(props) {
     const newMessageFlow = useRef(null);
 
     const onChange = (e) => {
-        console.log('radio checked', e.target.value);
         setType(e.target.value);
     };
 
     const onChangeIsSelf = (e) => {
-        console.log(`onChangeIsSelf = ${e.target.checked}`);
         setIsSelf(e.target.checked);
     };
 
     const sendInfo = () => {
-        console.log('type', type, inputValue, isSelf, props.messageFlow);
+        const messageKey = uuidV4();
         const messageFlow = props.messageFlow;
         const newMessage = createMessage(
             type === 2 ? imgUrl : inputValue,
             type,
             isSelf,
-            messageFlow
+            messageFlow,
+            messageKey
         );
         const newMessageDom = newMessage.showMessage();
         const addUndo = (
-            <div key={uuidV4()} onClick={() => messageUndo(newMessage)}>
+            <div
+                key={messageKey + '-' + uuidV4()}
+                onClick={() => messageUndo(newMessage, isSelf, type)}
+            >
+                <div style={{ textAlign: 'center' }}>
+                    {newMessage.userInfo.createTime}
+                </div>
                 {newMessageDom}
             </div>
         );
@@ -50,9 +55,23 @@ function SendMessage(props) {
         scrollToBottom('chatArea');
     };
 
-    const messageUndo = (message) => {
-        const id = message.undo();
-        console.log(' id', id, newMessageFlow.current);
+    const messageUndo = (message, isSelf) => {
+        if (isSelf && type !== 3) {
+            const key = message.undo();
+            let messageFlowRef = newMessageFlow.current;
+            const undoMessage = (
+                <div key={key + 'undo'} style={{ textAlign: 'center' }}>
+                    您撤回了一条消息
+                </div>
+            );
+            for (let i = 0; i < messageFlowRef.length; i++) {
+                if (messageFlowRef[i].key.indexOf(key) !== -1) {
+                    messageFlowRef.splice(i, 1, undoMessage);
+                    break;
+                }
+            }
+            props.setMessageFlow([...messageFlowRef]);
+        }
     };
 
     const inputOnChange = (e) => {
@@ -100,16 +119,38 @@ function SendMessage(props) {
             <Checkbox checked={isSelf} onChange={onChangeIsSelf}>
                 自己
             </Checkbox>
+
+            <Button
+                style={{ margin: '10px 0' }}
+                onClick={() => props.setMessageFlow([])}
+            >
+                重置
+            </Button>
         </div>
     );
 }
 
-function createMessage(content, type, isSelf, messageFlow) {
+//----------------------------------------------------------------
+/**
+ * 创建消息的函数
+ * @param {string} content
+ * @param {number} type
+ * @param {boolean} isSelf
+ * @param {array} messageFlow
+ * @returns reactElement
+ */
+function createMessage(content, type, isSelf, messageFlow, messageKey) {
     const userInfo = new UserInfo(isSelf);
     const position = isSelf ? 'flex-end' : 'flex-start';
     const messageIndex = messageFlow.length;
     const MessageType = actions[type];
-    let newMessage = new MessageType(content, position, userInfo, messageIndex);
+    let newMessage = new MessageType(
+        content,
+        position,
+        userInfo,
+        messageIndex,
+        messageKey
+    );
     return newMessage;
 }
 
