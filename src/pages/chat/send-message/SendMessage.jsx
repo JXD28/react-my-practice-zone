@@ -121,7 +121,7 @@ function SendMessage(props) {
             </Checkbox>
 
             <Button
-                style={{ margin: '10px 0' }}
+                style={{ margin: 10 }}
                 onClick={() => props.setMessageFlow([])}
             >
                 重置

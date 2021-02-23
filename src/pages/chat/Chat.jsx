@@ -29,6 +29,9 @@ function Chat(props) {
                     setMessageFlow={setMessageFlow}
                     messageFlow={messageFlow}
                 ></SendMessage>
+                <div style={{ textAlign: 'center' }}>
+                    点击自己发送的消息即可撤销
+                </div>
             </div>
         </div>
     );
